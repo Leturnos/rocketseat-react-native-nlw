@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Alert, View } from "react-native";
+import { Alert, View, StyleSheet } from "react-native";
+import  MapView from "react-native-maps"
 
 import { api } from "@/services/api";
 
@@ -9,6 +10,11 @@ import { Categories, CategoriesProps } from "@/components/categories";
 import { colors } from "@/styles/colors";
 
 type MarketProps = PlaceProps 
+
+const currentLocation ={
+    latitude: -23.561187293883442,
+    longitude: -46.656451388116494,
+}
 
 export default function Home(){
     const [categories, setCategories] = 
@@ -50,8 +56,17 @@ export default function Home(){
 
     return (
         <View style={{flex:1 , backgroundColor: colors.green.soft}}>
-            <Categories data={categories} onSelected={setCategory} selected={category}/>
-        
+            <MapView style={StyleSheet.absoluteFillObject}
+            initialRegion={{
+                latitude: currentLocation.latitude,
+                longitude: currentLocation.longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+            }}/>
+            <View>
+                <Categories data={categories} onSelected={setCategory} selected={category}/>
+            </View>
+            
             <Places data={markets} />
         </View>
     )
