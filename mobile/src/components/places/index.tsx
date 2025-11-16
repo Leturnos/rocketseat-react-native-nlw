@@ -1,6 +1,6 @@
-import { Text, useWindowDimensions } from "react-native";
+import { Text, useWindowDimensions, ListRenderItem } from "react-native"; 
 import BottomSheet, {BottomSheetFlatList} from "@gorhom/bottom-sheet"
-import { router, Router } from "expo-router";
+import { router } from "expo-router";
 
 import { Place, PlaceProps } from "../place"
 import { useRef } from "react";
@@ -9,6 +9,16 @@ import { styleSheet } from "./styles";
 type Props = {
     data: PlaceProps[]
 }
+
+const renderPlaceItem: ListRenderItem<PlaceProps> = ({ item }) => (
+    <Place 
+        data={item} 
+        onPress={() => router.navigate(`/market/${item.id}`)}
+    />
+);
+
+const extractPlaceKey = (item: PlaceProps) => item.id;
+
 
 export function Places ({data}: Props) {
     const dimensions = useWindowDimensions()
@@ -22,18 +32,15 @@ export function Places ({data}: Props) {
     return (
         <BottomSheet
             ref={bottomSheetRef}
-            snapPoints={[snapPoints.min, snapPoints.max]} // pontos onde o bottom sheet para
+            snapPoints={[snapPoints.min, snapPoints.max]}  // pontos onde o bottom sheet para
             handleIndicatorStyle={styleSheet.indicator}
             backgroundStyle={styleSheet.container}
             enableOverDrag={false}
         >
             <BottomSheetFlatList
                 data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => (
-                    <Place data={item} onPress={() => router.navigate(`/market/${item.id}`)}
-                    />
-                )}
+                keyExtractor={extractPlaceKey}
+                renderItem={renderPlaceItem}
                 contentContainerStyle={styleSheet.content}
                 ListHeaderComponent={()=>(
                     <Text style={styleSheet.title}>Explore locais perto de você</Text>
