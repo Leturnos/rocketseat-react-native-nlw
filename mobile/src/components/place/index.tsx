@@ -10,7 +10,7 @@ export type PlaceProps = {
     description: string
     coupons: number
     cover: string
-    adress: string
+    address: string
 }
 
 type Props = TouchableOpacityProps & {
